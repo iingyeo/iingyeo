@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class IingyeoApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(IingyeoApplication.class, args);
     }
 }
