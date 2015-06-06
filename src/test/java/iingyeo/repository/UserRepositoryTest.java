@@ -1,7 +1,9 @@
-package iingyeo;
+package iingyeo.repository;
 
+import iingyeo.IingyeoTestApplication;
 import iingyeo.entity.User;
 import iingyeo.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = IingyeoTestApplication.class)
-@WebAppConfiguration
-public class IingyeoApplicationTests {
-
-    private static final Logger log = LoggerFactory.getLogger(IingyeoApplicationTests.class);
+@Slf4j
+public class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;

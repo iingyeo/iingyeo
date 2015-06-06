@@ -3,13 +3,14 @@ package iingyeo.entity;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Taemyung on 2015-06-06.
  */
 @Data
-public class User {
+public class User implements Serializable {
 
     @Id
     private String id;
@@ -18,6 +19,9 @@ public class User {
     private String lastName;
     private String emailAddress;
     private Date birthDate;
+
+    public User() {
+    }
 
     public User(String firstName, String lastName, String emailAddress, Date birthDate) {
         this.firstName = firstName;
