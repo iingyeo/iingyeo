@@ -1,5 +1,6 @@
 package iingyeo.controller;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import iingyeo.entity.User;
 import iingyeo.model.UserListResponse;
 import iingyeo.model.UserRequest;
@@ -24,6 +25,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @ApiOperation(value = "Add an user", notes = "Add an user")
     @RequestMapping(method = RequestMethod.POST)
     public UserResponse addUser(@RequestBody UserRequest userRequest) {
 
@@ -39,6 +41,7 @@ public class UserController {
 
     }
 
+    @ApiOperation(value = "Get an user by Id", notes = "Get an user by Id")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public UserResponse getUser(@PathVariable String id) {
 
@@ -52,6 +55,7 @@ public class UserController {
 
     }
 
+    @ApiOperation(value = "Get users", notes = "Get users by pageNum, recordCount")
     @RequestMapping(method = RequestMethod.GET)
     public UserListResponse getUsers(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
 
@@ -69,6 +73,7 @@ public class UserController {
 
     }
 
+    @ApiOperation(value = "Update an user", notes = "Update an user")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public UserResponse updateUser(@PathVariable String id, @RequestBody UserRequest userRequest) {
 
@@ -90,6 +95,7 @@ public class UserController {
 
     }
 
+    @ApiOperation(value = "Delete an user by Id", notes = "Delete an user by Id")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable String id) {
 
