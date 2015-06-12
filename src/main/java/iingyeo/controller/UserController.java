@@ -49,7 +49,7 @@ public class UserController {
 
         UserResponse userResponse = new UserResponse(userRepository.findOne(id));
 
-        log.debug("get user response for id[{}]", id, userResponse);
+        log.debug("get user response for id[{}] : {}", id, userResponse);
 
         return userResponse;
 
