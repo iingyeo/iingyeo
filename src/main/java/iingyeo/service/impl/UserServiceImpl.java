@@ -11,13 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by rainhelper on 2015. 6. 13..
  */
 @Service
-@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
 

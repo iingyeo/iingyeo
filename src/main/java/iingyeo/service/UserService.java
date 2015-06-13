@@ -12,7 +12,7 @@ public interface UserService {
 
     public User getUser(String id);
 
-    UserListResponse getUsers(int pageNum, int recordCount);
+    public UserListResponse getUsers(int pageNum, int recordCount);
 
     public User updateUser(User user);
 
