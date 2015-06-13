@@ -5,13 +5,9 @@ import iingyeo.entity.User;
 import iingyeo.model.UserListResponse;
 import iingyeo.model.UserRequest;
 import iingyeo.model.UserResponse;
-import iingyeo.repository.UserRepository;
-import iingyeo.util.IingyeoBeanUtils;
+import iingyeo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @ApiOperation(value = "Add an user", notes = "Add an user")
     @RequestMapping(method = RequestMethod.POST)
@@ -31,7 +27,7 @@ public class UserController {
 
         log.debug("add user request : {}", userRequest);
 
-        User user = userRepository.save(userRequest.convertToUser());
+        User user = userService.addUser(userRequest.convertToUser());
 
         UserResponse userResponse = new UserResponse(user);
 
@@ -47,7 +43,9 @@ public class UserController {
 
         log.debug("get user request for id[{}]", id);
 
-        UserResponse userResponse = new UserResponse(userRepository.findOne(id));
+        User user = userService.getUser(id);
+
+        UserResponse userResponse = new UserResponse(user);
 
         log.debug("get user response for id[{}] : {}", id, userResponse);
 
@@ -61,11 +59,7 @@ public class UserController {
 
         log.debug("get users request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
 
-        Pageable pageRequest = new PageRequest(pageNum, recordCount);
-
-        Page<User> page = userRepository.findAll(pageRequest);
-
-        UserListResponse userListResponse = new UserListResponse(page.getTotalPages(), page.getTotalElements(), pageNum, page.getContent());
+        UserListResponse userListResponse = userService.getUsers(pageNum, recordCount);
 
         log.debug("get users result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, userListResponse);
 
@@ -79,13 +73,11 @@ public class UserController {
 
         log.debug("update user request for id[{}] : {}", id, userRequest);
 
-        User targetUser = userRepository.findOne(id);
+        User user = userRequest.convertToUser();
 
-        IingyeoBeanUtils.copyNotNullProperties(userRequest.convertToUser(), targetUser);
+        user.setId(id);
 
-        log.debug("target user : {}", targetUser);
-
-        User updatedUser = userRepository.save(targetUser);
+        User updatedUser = userService.updateUser(user);
 
         UserResponse userResponse = new UserResponse(updatedUser);
 
@@ -101,8 +93,7 @@ public class UserController {
 
         log.debug("delete user request for id[{}]", id);
 
-        userRepository.delete(id);
-
+        userService.deleteUser(id);
     }
 
 }
