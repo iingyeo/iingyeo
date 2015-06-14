@@ -39,6 +39,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.security.oauth:spring-security-oauth2")
     compile("org.projectlombok:lombok:1.16.4")
     compile("commons-beanutils:commons-beanutils")
     compile("com.mangofactory:swagger-springmvc:1.0.2")

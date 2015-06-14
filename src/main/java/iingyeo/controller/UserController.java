@@ -8,6 +8,7 @@ import iingyeo.model.UserResponse;
 import iingyeo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -39,6 +40,7 @@ public class UserController {
 
     @ApiOperation(value = "Get an user by Id", notes = "Get an user by Id")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @PreAuthorize("#oauth2.hasScope('read')")
     public UserResponse getUser(@PathVariable String id) {
 
         log.debug("get user request for id[{}]", id);
@@ -55,6 +57,7 @@ public class UserController {
 
     @ApiOperation(value = "Get users", notes = "Get users by pageNum, recordCount")
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("#oauth2.hasScope('read')")
     public UserListResponse getUsers(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
 
         log.debug("get users request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
@@ -69,6 +72,7 @@ public class UserController {
 
     @ApiOperation(value = "Update an user", notes = "Update an user")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PreAuthorize("#oauth2.hasScope('write')")
     public UserResponse updateUser(@PathVariable String id, @RequestBody UserRequest userRequest) {
 
         log.debug("update user request for id[{}] : {}", id, userRequest);
@@ -89,6 +93,7 @@ public class UserController {
 
     @ApiOperation(value = "Delete an user by Id", notes = "Delete an user by Id")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("#oauth2.hasScope('write')")
     public void deleteUser(@PathVariable String id) {
 
         log.debug("delete user request for id[{}]", id);
