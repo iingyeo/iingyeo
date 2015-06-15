@@ -9,6 +9,6 @@ import org.springframework.data.querydsl.QueryDslPredicateExecutor;
  */
 public interface UserRepository extends MongoRepository<User, String>, QueryDslPredicateExecutor<User> {
 
-    public User findByEmailAddress(String emailAddress);
+    public User findByUsername(String username);
 
 }

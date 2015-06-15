@@ -16,10 +16,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.Date;
-
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 /**
  * Created by Taemyung on 2015-06-07.
@@ -50,10 +49,8 @@ public class UserControllerTest {
 
         // Given
         UserRequest userRequest = new UserRequest();
-        userRequest.setFirstName("firstName1");
-        userRequest.setLastName("lastName1");
-        userRequest.setEmailAddress("tester@test.com");
-        userRequest.setBirthDate(new Date());
+        userRequest.setUsername("username");
+        userRequest.setPassword("1234");
 
         given()
                 .body(userRequest)
@@ -64,8 +61,8 @@ public class UserControllerTest {
                         // Then
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("firstName", is(userRequest.getFirstName()))
-                .body("emailAddress", is(userRequest.getEmailAddress()));
+                .body("username", is(userRequest.getUsername()))
+                .body("created", notNullValue());
 
     }
 }

@@ -13,10 +13,8 @@ import java.util.Date;
 @Data
 public class UserRequest implements Serializable {
 
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
-    private Date birthDate;
+    private String username;
+    private String password;
 
     public UserRequest() {
     }

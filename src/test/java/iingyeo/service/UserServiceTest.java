@@ -30,10 +30,7 @@ public class UserServiceTest {
     @Test
     public void testAddUser() throws Exception {
         // Given
-        User user = new User();
-        user.setFirstName("first name");
-        user.setLastName("last name");
-        user.setBirthDate(new Date());
+        User user = new User("username", "1234");
 
         // When
         user = userService.addUser(user);
@@ -51,20 +48,20 @@ public class UserServiceTest {
         User getUser = userService.getUser(user.getId());
 
         // Then
-        Assert.assertEquals(getUser.getFirstName(), "first name");
+        Assert.assertEquals(getUser.getUsername(), "username");
     }
 
     @Test
     public void testUpdateUser() throws Exception {
         // Given
         User user = addUser();
-        user.setFirstName("updated name");
+        user.setUsername("updated name");
 
         // When
         user = userService.updateUser(user);
 
         // Then
-        Assert.assertEquals(user.getFirstName(), "updated name");
+        Assert.assertEquals(user.getUsername(), "updated name");
     }
 
     @Test
@@ -80,11 +77,7 @@ public class UserServiceTest {
     }
 
     public User addUser() {
-        User user = new User();
-
-        user.setFirstName("first name");
-        user.setLastName("last name");
-        user.setBirthDate(new Date());
+        User user = new User("username", "1234");
 
         user = userService.addUser(user);
 

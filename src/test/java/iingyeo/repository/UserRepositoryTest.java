@@ -37,22 +37,22 @@ public class UserRepositoryTest {
     public void testFindByEmailAddress() {
 
         // Given
-        userRepository.save(new User("taemyung", "heo", "tmheo74@gmail.com", new Date()));
-        userRepository.save(new User("minseo", "heo", "minseo@gmail.com", new Date()));
-        userRepository.save(new User("jungwoo", "heo", "jungwoo@gmail.com", new Date()));
+        userRepository.save(new User("taemyung", "1234"));
+        userRepository.save(new User("minseo", "1234"));
+        userRepository.save(new User("jungwoo", "1234"));
 
         for (User user : userRepository.findAll()) {
             log.info("user : {}", user);
         }
 
         // When
-        User user = userRepository.findByEmailAddress("tmheo74@gmail.com");
+        User user = userRepository.findByUsername("taemyung");
 
-        log.info("find user by emailAddress : {}", user);
+        log.info("find user by username : {}", user);
 
         // Then
         assertThat(user, notNullValue());
-        assertThat(user.getFirstName(), is("taemyung"));
+        assertThat(user.getUsername(), is("taemyung"));
 
     }
 

@@ -14,10 +14,9 @@ import java.util.Date;
 public class UserResponse implements Serializable {
 
     private String id;
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
-    private Date birthDate;
+    private String username;
+    private Date created;
+    private Date updated;
 
     public UserResponse() {
     }
