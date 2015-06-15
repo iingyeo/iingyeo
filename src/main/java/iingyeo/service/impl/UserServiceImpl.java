@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * Created by rainhelper on 2015. 6. 13..
@@ -20,12 +23,19 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User addUser(User user) {
 
         log.debug("add user request : {}", user);
+
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+
+        user.setPassword(hashedPassword);
 
         userRepository.save(user);
 
@@ -70,6 +80,7 @@ public class UserServiceImpl implements UserService {
         User targetUser = userRepository.findOne(user.getId());
 
         IingyeoBeanUtils.copyNotNullProperties(user, targetUser);
+        targetUser.setUpdated(new Date());
 
         User updatedUser = userRepository.save(targetUser);
 
