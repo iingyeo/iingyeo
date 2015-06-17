@@ -17,12 +17,12 @@ public class SessionMapper {
     private static final ConcurrentHashMap<String, WebSocketSession> websocketSessionMap = new ConcurrentHashMap<String, WebSocketSession>();
 
     public static synchronized void add(WebSocketSession session) {
-        log.debug("add Session : {} {]", session.getId(), session.toString());
+        log.debug("add Session : {} {}", session.getId(), session.toString());
         websocketSessionMap.put(session.getId(), session);
     }
 
     public static synchronized void remove(WebSocketSession session) {
-        log.debug("remove Session : {} {]", session.getId(), session.toString());
+        log.debug("remove Session : {} {}", session.getId(), session.toString());
         websocketSessionMap.remove(session.getId());
     }
 
@@ -37,7 +37,7 @@ public class SessionMapper {
                     }
                 }
             } catch (IOException e) {
-                log.error("", e);
+                log.error("{}", e);
             }
         }
     }
