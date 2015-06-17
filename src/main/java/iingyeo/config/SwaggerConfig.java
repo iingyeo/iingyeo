@@ -32,7 +32,7 @@ public class SwaggerConfig {
                 ))
                 .useDefaultResponseMessages(false)
                         //Map the specific URL patterns into Swagger
-                .includePatterns("/users", "/users/.*");
+                .includePatterns("/.*");
     }
 
 }
