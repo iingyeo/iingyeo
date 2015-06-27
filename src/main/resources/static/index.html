@@ -36,10 +36,30 @@
 <script src="js/JSXTransformer.js"></script>
 
 <script type="text/jsx">
+    'use strict';
+
+    var request = window.superagent;
 
     var Input = ReactBootstrap.Input;
     var ButtonInput = ReactBootstrap.ButtonInput;
     var FormControls = ReactBootstrap.FormControls;
+
+    var clientId = 'iingyeo';
+    var secret = '1234';
+    var accessToken;
+
+    var callGetUsers = function() {
+        request
+              .get('/users')
+              .set('Authorization', 'Bearer ' + accessToken)
+              .end(function(err, res) {
+                  if (res.ok) {
+                      console.log('response : ' + JSON.stringify(res.body));
+                  } else {
+                      console.log('error : ' + res.text);
+                  }
+              });
+    };
 
     var LoginForm = React.createClass({
         handleSubmit: function (e) {
@@ -47,12 +67,29 @@
             var username = this.refs.username.getValue().trim();
             var password = this.refs.password.getValue().trim();
 
-            console.log("username : " + username);
-            console.log("password : " + password);
-
             if (!username || !password) {
                 return;
             }
+
+            request
+                    .post('/oauth/token')
+                    .auth(clientId, secret)
+                    .send('grant_type=password')
+                    .send('scope=read write')
+                    .send('username=' + username)
+                    .send('password=' + password)
+                    .end(function(err, res) {
+                        if (res.ok) {
+                            console.log('access token : ' + res.body.access_token);
+                            accessToken = res.body.access_token;
+
+                            // test rest api call
+                            callGetUsers();
+                        } else {
+                            console.log('error : ' + res.text);
+                        }
+                    });
+
             // TODO: send request to the server
             this.refs.username.getInputDOMNode().value = '';
             this.refs.password.getInputDOMNode().value = '';
