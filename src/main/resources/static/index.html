@@ -29,21 +29,54 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.js"></script>
+
 <script src="js/react.js"></script>
 <script src="js/react-bootstrap.js"></script>
 <script src="js/JSXTransformer.js"></script>
 
 <script type="text/jsx">
-    var Input = ReactBootstrap.Input;
 
-    const inputInstance = (
-            <form className='form-horizontal'>
-                <Input type='text' label='Username' labelClassName='col-xs-2' wrapperClassName='col-xs-2' placeholder="Enter username"/>
-                <Input type='password' label='Password' labelClassName='col-xs-2' wrapperClassName='col-xs-2' placeholder="Enter password"/>
-            </form>
-    );
+    var Input = ReactBootstrap.Input;
+    var ButtonInput = ReactBootstrap.ButtonInput;
+    var FormControls = ReactBootstrap.FormControls;
+
+    var LoginForm = React.createClass({
+        handleSubmit: function (e) {
+            e.preventDefault();
+            var username = this.refs.username.getValue().trim();
+            var password = this.refs.password.getValue().trim();
+
+            console.log("username : " + username);
+            console.log("password : " + password);
+
+            if (!username || !password) {
+                return;
+            }
+            // TODO: send request to the server
+            this.refs.username.getInputDOMNode().value = '';
+            this.refs.password.getInputDOMNode().value = '';
+            return;
+        },
+        render: function () {
+            return (
+                    <form className='form-horizontal' onSubmit={this.handleSubmit}>
+                        <FormControls.Static className="col-xs-10 col-xs-offset-2" bsSize="large" value="Login" />
+                        <Input type='text' wrapperClassName='col-xs-offset-2 col-xs-2'
+                               placeholder="
+                          Enter username" ref="username"/>
+                        <Input type='password' wrapperClassName='col-xs-offset-2 col-xs-2'
+                               placeholder="
+                          Enter password" ref="password"/>
+                        <ButtonInput type="submit" value="Sign in" bsStyle='primary'
+                                     wrapperClassName='col-xs-offset-2 col-xs-2'/>
+                    </form>
+            );
+        }
+    });
+
     React.render(
-            inputInstance,
+            <LoginForm />,
             document.getElementById('contents')
     );
 </script>
