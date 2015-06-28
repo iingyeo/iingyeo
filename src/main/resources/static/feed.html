@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Hello React!</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        .feed{
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="feed" id="feed" ></div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.js"></script>
+
+<script src="js/react.js"></script>
+<script src="js/react-bootstrap.js"></script>
+<script src="js/JSXTransformer.js"></script>
+
+<script type="text/jsx">
+
+    var FeedPanel = React.createClass({
+
+        render: function () {
+
+            var style = {
+                color: 'white',
+                fontSize: 30,
+                height: 500,
+                backgroundImage: 'url(http://postfiles12.naver.net/20150502_27/skywings38_1430531229284WnRil_JPEG/003.jpg?type=w1)'
+            };
+
+            return (
+
+                    <div className="panel panel-default" >
+
+                        <div className="panel-body" style={style}> 음하하하하하하 </div>
+                        <div className="panel-footer clearfix">
+                            <div className="pull-right">
+                                <a href="#" ><span className="glyphicon glyphicon-thumbs-up"></span> <span className="badge">20</span></a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="#" ><span className="glyphicon glyphicon-duplicate"></span> <span className="badge">0</span></a>
+                            </div>
+                        </div>
+                    </div>
+
+            );
+        }
+    });
+
+    React.render(
+            <FeedPanel />,
+            document.getElementById('feed')
+    );
+</script>
+</body>
+</html>
