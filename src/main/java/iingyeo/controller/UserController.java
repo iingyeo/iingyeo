@@ -40,7 +40,7 @@ public class UserController {
 
     @ApiOperation(value = "Get an user by Id", notes = "Get an user by Id")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @PreAuthorize("#oauth2.hasScope('read')")
+    //@PreAuthorize("#oauth2.hasScope('read')")
     public UserResponse getUser(@PathVariable String id) {
 
         log.debug("get user request for id[{}]", id);
@@ -57,7 +57,7 @@ public class UserController {
 
     @ApiOperation(value = "Get users", notes = "Get users by pageNum, recordCount")
     @RequestMapping(method = RequestMethod.GET)
-    @PreAuthorize("#oauth2.hasScope('read')")
+    //@PreAuthorize("#oauth2.hasScope('read')")
     public UserListResponse getUsers(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
 
         log.debug("get users request for pageNum[{}], recordCount[{}]", pageNum, recordCount);

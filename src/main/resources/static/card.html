@@ -21,7 +21,7 @@
     <![endif]-->
 
     <style type="text/css">
-        .card{
+        .card {
             margin: 20px;
             height: 300px;
             width: 600px;
@@ -30,7 +30,7 @@
 </head>
 <body>
 
-<div class="card" id="card" ></div>
+<div class="card" id="card"></div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -48,48 +48,66 @@
 
     var CardPanel = React.createClass({
 
-        getInitialState: function() {
+        getInitialState: function () {
             return {data: []};
         },
 
-        componentDidMount: function() {
+        componentDidMount: function () {
             $.ajax({
-                url: "http://localhost:8080/cards/5592b668d4c6e9072ad4c593",
+                url: "http://localhost:8080/cards",
                 dataType: 'json',
                 cache: false,
-                success: function(data) {
-                    this.setState({data: data});
+                success: function (data) {
+                    //this.setState({data: data});
+                    this.setState({data: data.cards});
                 }.bind(this),
-                error: function(xhr, status, err) {
+                error: function (xhr, status, err) {
                     console.error(this.props.url, status, err.toString());
                 }.bind(this)
             });
         },
 
         render: function () {
-
-            var style = {
-                color: 'white',
-                fontSize: 30,
-                height: 300,
-                width: 600,
-                backgroundImage: 'url(http://cfile27.uf.tistory.com/image/0206ED5050D93747245A61)'
-            };
-
             return (
+                    <CardList data={this.state.data}/>
+            );
+        }
+    });
 
-                    <div className="panel panel-default" >
-
-                        <div className="panel-body" style={style}> {this.state.data.text} </div>
-                        <div className="panel-footer clearfix">
-                            <div className="pull-right">
-                                <a href="#" ><span className="glyphicon glyphicon-thumbs-up"></span> <span className="badge">20</span></a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <a href="#" ><span className="glyphicon glyphicon-duplicate"></span> <span className="badge">0</span></a>
+    var CardList = React.createClass({
+        render: function () {
+            var cardNodes = this.props.data.map(function (card) {
+                var imageUrl = card.backgroundUrl;
+                var style = {
+                    color: 'white',
+                    fontSize: 30,
+                    height: 300,
+                    width: 600,
+                    backgroundImage: 'url(' + imageUrl + ')'
+                };
+                return (
+                        <div className="panel panel-default">
+                            <div className="panel-body" style={style}> {card.text} </div>
+                            <div className="panel-footer clearfix">
+                                <div className="pull-right">
+                                    <a href="#">
+                                        <span className="glyphicon glyphicon-thumbs-up"></span>
+                                        <span className="badge">20</span>
+                                    </a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="#">
+                                        <span className="glyphicon glyphicon-duplicate"></span>
+                                        <span className="badge">0</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                );
+            });
+            return (
+                    <div className="cardList">
+                        {cardNodes}
                     </div>
-
             );
         }
     });
