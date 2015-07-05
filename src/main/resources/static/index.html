@@ -31,9 +31,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.js"></script>
 
+
 <script src="js/react.js"></script>
 <script src="js/react-bootstrap.js"></script>
 <script src="js/JSXTransformer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-router/0.13.0/ReactRouter.min.js"></script>
 
 <script type="text/jsx">
     'use strict';
@@ -43,22 +45,24 @@
     var Input = ReactBootstrap.Input;
     var ButtonInput = ReactBootstrap.ButtonInput;
     var FormControls = ReactBootstrap.FormControls;
+    var Link = ReactRouter.Link;
 
     var clientId = 'iingyeo';
     var secret = '1234';
     var accessToken;
 
-    var callGetUsers = function() {
+    var callGetUsers = function () {
         request
-              .get('/users')
-              .set('Authorization', 'Bearer ' + accessToken)
-              .end(function(err, res) {
-                  if (res.ok) {
-                      console.log('response : ' + JSON.stringify(res.body));
-                  } else {
-                      console.log('error : ' + res.text);
-                  }
-              });
+                .get('/users')
+                .set('Authorization', 'Bearer ' + accessToken)
+                .end(function (err, res) {
+                    if (res.ok) {
+                        console.log('response : ' + JSON.stringify(res.body));
+                        window.location.href = "card.html";
+                    } else {
+                        console.log('error : ' + res.text);
+                    }
+                });
     };
 
     var LoginForm = React.createClass({
@@ -78,7 +82,7 @@
                     .send('scope=read write')
                     .send('username=' + username)
                     .send('password=' + password)
-                    .end(function(err, res) {
+                    .end(function (err, res) {
                         if (res.ok) {
                             console.log('access token : ' + res.body.access_token);
                             accessToken = res.body.access_token;
@@ -93,18 +97,17 @@
             // TODO: send request to the server
             this.refs.username.getInputDOMNode().value = '';
             this.refs.password.getInputDOMNode().value = '';
+
             return;
         },
         render: function () {
             return (
                     <form className='form-horizontal' onSubmit={this.handleSubmit}>
-                        <FormControls.Static className="col-xs-10 col-xs-offset-2" bsSize="large" value="Login" />
+                        <FormControls.Static className="col-xs-10 col-xs-offset-2" bsSize="large" value="Login"/>
                         <Input type='text' wrapperClassName='col-xs-offset-2 col-xs-2'
-                               placeholder="
-                          Enter username" ref="username"/>
+                               placeholder="Enter username" ref="username"/>
                         <Input type='password' wrapperClassName='col-xs-offset-2 col-xs-2'
-                               placeholder="
-                          Enter password" ref="password"/>
+                               placeholder="Enter password" ref="password"/>
                         <ButtonInput type="submit" value="Sign in" bsStyle='primary'
                                      wrapperClassName='col-xs-offset-2 col-xs-2'/>
                     </form>
