@@ -15,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class CardResponse implements Serializable {
 
+    private String id;
     private String userId;
 
     private String text;
