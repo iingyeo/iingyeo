@@ -33,72 +33,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Slf4j
-public class UserControllerTest {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Value("${local.server.port}")
-    private int serverPort;
-
-    private User user;
-
-    private String clientId;
-    private String secret;
-
-    private String username;
-    private String password;
-
-    @Before
-    public void setUp() throws Exception {
-
-        userRepository.deleteAll();
-
-        clientId = "iingyeo";
-        secret = "1234";
-
-        username = "tester";
-        password = "1234";
-
-        user = new User(username, password);
-
-        userService.addUser(user);
-
-        RestAssured.port = serverPort;
-
-    }
-
-    public String getAccessToken() throws Exception {
-
-        String auth = clientId + ":" + secret;
-
-        String authEncoded = Base64.getEncoder().encodeToString(auth.getBytes());
-
-        // Given
-        String accessToken = given()
-                .header("Authorization", "Basic " + authEncoded)
-                .formParam("username", username)
-                .formParam("password", password)
-                .formParam("grant_type", "password")
-                .formParam("scope", "read write")
-                        // When
-                .when()
-                .post("/oauth/token")
-                        // Then
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-
-                .extract()
-                .path("access_token");
-
-        log.debug("access token for user[{}] : [{}]", username, accessToken);
-
-        return accessToken;
-
-    }
+public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testAddUser() throws Exception {
