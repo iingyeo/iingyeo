@@ -25,7 +25,7 @@ public class SimpleCORSFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
 
-        log.debug("request uri : {}", request.getRequestURI());
+        log.trace("request uri : {}", request.getRequestURI());
 
         if (request.getRequestURI().startsWith("/oauth") && request.getMethod().equalsIgnoreCase("OPTIONS")) {
             return;
