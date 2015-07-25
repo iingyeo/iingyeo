@@ -1,6 +1,7 @@
 package iingyeo.service.impl;
 
 import iingyeo.entity.User;
+import iingyeo.model.IingyeoUserDetails;
 import iingyeo.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,47 +35,4 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         return new IingyeoUserDetails(user);
     }
 
-    private static class IingyeoUserDetails implements UserDetails {
-
-        private User user;
-
-        public IingyeoUserDetails(User user) {
-            this.user = user;
-        }
-
-        @Override
-        public Collection<? extends GrantedAuthority> getAuthorities() {
-            return user.getRoles();
-        }
-
-        @Override
-        public String getPassword() {
-            return user.getPassword();
-        }
-
-        @Override
-        public String getUsername() {
-            return user.getUsername();
-        }
-
-        @Override
-        public boolean isAccountNonExpired() {
-            return true;
-        }
-
-        @Override
-        public boolean isAccountNonLocked() {
-            return true;
-        }
-
-        @Override
-        public boolean isCredentialsNonExpired() {
-            return true;
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return true;
-        }
-    }
 }

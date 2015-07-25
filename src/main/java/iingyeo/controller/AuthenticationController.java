@@ -1,5 +1,9 @@
 package iingyeo.controller;
 
+import iingyeo.entity.User;
+import iingyeo.model.IingyeoUserDetails;
+import iingyeo.model.UserResponse;
+import iingyeo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,12 +35,21 @@ public class AuthenticationController {
     @Autowired
     private DefaultTokenServices tokenService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public Principal getLoggedInUser(Principal user) {
+    public UserResponse getLoggedInUser(Principal principal) {
 
-        log.debug("logged in user : [{}]", user.getName());
+        OAuth2Authentication auth = (OAuth2Authentication) principal;
 
-        return user;
+        IingyeoUserDetails userDetails = (IingyeoUserDetails) auth.getPrincipal();
+
+        UserResponse userResponse = new UserResponse(userDetails.getUser());
+
+        log.debug("logged in user : [{}]", userResponse);
+
+        return userResponse;
 
     }
 
