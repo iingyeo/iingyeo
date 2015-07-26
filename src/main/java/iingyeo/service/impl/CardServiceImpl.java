@@ -4,12 +4,15 @@ import iingyeo.entity.Card;
 import iingyeo.model.CardListResponse;
 import iingyeo.repository.CardRepository;
 import iingyeo.service.CardService;
+import iingyeo.util.IingyeoBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * Created by Kang on 2015. 7. 1..
@@ -63,4 +66,34 @@ public class CardServiceImpl implements CardService {
 
         return cardListResponse;
     }
+
+    @Override
+    public Card updateCard(Card card) {
+
+        log.debug("update card request : {}", card);
+
+        Card targetCard = cardRepository.findOne(card.getId());
+
+        IingyeoBeanUtils.copyNotNullProperties(card, targetCard);
+        targetCard.setUpdated(new Date());
+
+        Card updatedCard = cardRepository.save(targetCard);
+
+        log.debug("update card response : {}", updatedCard);
+
+        return updatedCard;
+    }
+
+    @Override
+    public void deleteCard(String id) {
+
+        log.debug("delete card request by idd[{}]", id);
+
+        Card card = cardRepository.findOne(id);
+
+        if (card != null) {
+            cardRepository.delete(id);
+        }
+    }
+
 }

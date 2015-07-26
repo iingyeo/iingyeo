@@ -28,4 +28,9 @@ proguard/
 #Gradle
 .gradletasknamecache
 .gradle/
+gradle/
 build/
+gradlew*
+
+#Mac
+.DS_Store
