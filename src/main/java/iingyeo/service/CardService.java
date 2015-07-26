@@ -13,4 +13,8 @@ public interface CardService {
     public Card getCard(String id);
 
     public CardListResponse getCards(int pageNum, int recordCount);
+
+    public void deleteCard(String id);
+
+    public Card updateCard(Card card);
 }

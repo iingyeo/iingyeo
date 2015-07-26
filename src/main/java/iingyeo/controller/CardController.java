@@ -22,7 +22,7 @@ public class CardController {
     @Autowired
     private CardService cardService;
 
-    @ApiOperation(value = "Add an card", notes = "Add an card")
+    @ApiOperation(value = "Add a card", notes = "Add a card")
     @RequestMapping(method = RequestMethod.POST)
     public CardResponse addCard(@RequestBody CardRequest cardRequest) {
 
@@ -38,7 +38,7 @@ public class CardController {
 
     }
 
-    @ApiOperation(value = "Get an card by Id", notes = "Get an card by Id")
+    @ApiOperation(value = "Get a card by Id", notes = "Get a card by Id")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public CardResponse getCard(@PathVariable String id) {
 
@@ -67,4 +67,33 @@ public class CardController {
         return cardListResponse;
 
     }
+
+    @ApiOperation(value = "Update a card", notes = "Update a card")
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public CardResponse updateCard(@PathVariable String id, @RequestBody CardRequest cardRequest) {
+
+        log.debug("update card request for id[{}] : {}", id, cardRequest);
+
+        Card card = cardRequest.convertToCard();
+
+        card.setId(id);
+
+        Card updatedCard = cardService.updateCard(card);
+
+        CardResponse cardResponse = new CardResponse(card);
+
+        log.debug("update card response for id[{}] : {}", id, cardResponse);
+
+        return cardResponse;
+    }
+
+    @ApiOperation(value = "Delete a card by Id", notes = "Delete a card by Id")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deleteCard(@PathVariable String id) {
+
+        log.debug("delete card request for id[{}]", id);
+
+        cardService.deleteCard(id);
+    }
+
 }
