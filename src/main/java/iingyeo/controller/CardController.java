@@ -9,6 +9,7 @@ import iingyeo.model.CardResponse;
 import iingyeo.service.CardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -40,6 +41,7 @@ public class CardController {
 
     @ApiOperation(value = "Get a card by Id", notes = "Get a card by Id")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @PreAuthorize("#oauth2.hasScope('read')")
     public CardResponse getCard(@PathVariable String id) {
 
         log.debug("get card request for id[{}]", id);
@@ -56,6 +58,7 @@ public class CardController {
 
     @ApiOperation(value = "Get cards", notes = "Get cards by pageNum, recordCount")
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("#oauth2.hasScope('read')")
     public CardListResponse getCards(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
 
         log.debug("get cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
