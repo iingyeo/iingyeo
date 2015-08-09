@@ -55,9 +55,12 @@ public class CardControllerTest extends AbstractControllerTest {
     public void testGetCard() throws Exception {
 
         // Given
+        String accessToken = getAccessToken();
+
         Card card = addCard();
 
         given()
+                .header("Authorization", "Bearer " + accessToken)
                 .pathParam("id", card.getId())
                         // When
                 .when()
