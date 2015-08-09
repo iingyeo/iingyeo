@@ -2,15 +2,18 @@ package iingyeo.controller;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import iingyeo.entity.Card;
-
 import iingyeo.model.CardListResponse;
 import iingyeo.model.CardRequest;
 import iingyeo.model.CardResponse;
+import iingyeo.model.IingyeoUserDetails;
 import iingyeo.service.CardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 /**
  * Created by Kang on 2015. 7. 1..
@@ -25,11 +28,15 @@ public class CardController {
 
     @ApiOperation(value = "Add a card", notes = "Add a card")
     @RequestMapping(method = RequestMethod.POST)
-    public CardResponse addCard(@RequestBody CardRequest cardRequest) {
+    @PreAuthorize("#oauth2.hasScope('write')")
+    public CardResponse addCard(Principal principal, @RequestBody CardRequest cardRequest) {
+
+        OAuth2Authentication auth = (OAuth2Authentication) principal;
+        IingyeoUserDetails userDetails = (IingyeoUserDetails) auth.getPrincipal();
 
         log.debug("add card request : {}", cardRequest);
 
-        Card card = cardService.addCard(cardRequest.convertToCard());
+        Card card = cardService.addCard(cardRequest.convertToCard(userDetails.getUser().getId()));
 
         CardResponse cardResponse = new CardResponse(card);
 
@@ -73,11 +80,15 @@ public class CardController {
 
     @ApiOperation(value = "Update a card", notes = "Update a card")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public CardResponse updateCard(@PathVariable String id, @RequestBody CardRequest cardRequest) {
+    @PreAuthorize("#oauth2.hasScope('write')")
+    public CardResponse updateCard(Principal principal, @PathVariable String id, @RequestBody CardRequest cardRequest) {
+
+        OAuth2Authentication auth = (OAuth2Authentication) principal;
+        IingyeoUserDetails userDetails = (IingyeoUserDetails) auth.getPrincipal();
 
         log.debug("update card request for id[{}] : {}", id, cardRequest);
 
-        Card card = cardRequest.convertToCard();
+        Card card = cardRequest.convertToCard(userDetails.getUser().getId());
 
         card.setId(id);
 

@@ -14,16 +14,16 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class CardRequest implements Serializable {
 
-    private String userId;
-
     private String text;
     private String backgroundUrl;
 
-    public Card convertToCard() {
+    public Card convertToCard(String userId) {
 
         Card card = new Card();
 
         IingyeoBeanUtils.copyNotNullProperties(this, card);
+
+        card.setUserId(userId);
 
         return card;
 
