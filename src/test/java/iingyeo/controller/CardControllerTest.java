@@ -33,12 +33,15 @@ public class CardControllerTest extends AbstractControllerTest {
     public void testAddCard() throws Exception {
 
         // Given
+        String accessToken = getAccessToken();
+
         CardRequest cardRequest = new CardRequest();
 
         cardRequest.setText("test card");
         cardRequest.setBackgroundUrl("http://test.com/test.png");
 
         given()
+                .header("Authorization", "Bearer " + accessToken)
                 .body(cardRequest)
                 .contentType(ContentType.JSON)
                         // When
@@ -74,6 +77,8 @@ public class CardControllerTest extends AbstractControllerTest {
     public void testUpdateCard() throws Exception {
 
         // Given
+        String accessToken = getAccessToken();
+
         Card card = addCard();
         card.setText("updated card text");
         card.setBackgroundUrl("http://updated.com/updated.png");
@@ -83,6 +88,7 @@ public class CardControllerTest extends AbstractControllerTest {
         cardRequest.setBackgroundUrl(card.getBackgroundUrl());
 
         given()
+                .header("Authorization", "Bearer " + accessToken)
                 .pathParam("id", card.getId())
                 .body(cardRequest)
                 .contentType(ContentType.JSON)
@@ -112,7 +118,10 @@ public class CardControllerTest extends AbstractControllerTest {
                 .statusCode(HttpStatus.SC_OK);
     }
 
-    private Card addCard() {
+    private Card addCard() throws Exception {
+
+        String accessToken = getAccessToken();
+
         CardRequest cardRequest = new CardRequest();
 
         cardRequest.setText("test card");
@@ -120,6 +129,7 @@ public class CardControllerTest extends AbstractControllerTest {
 
         ResponseBodyExtractionOptions responseBodyExtractionOptions =
                 given()
+                        .header("Authorization", "Bearer " + accessToken)
                         .body(cardRequest)
                         .contentType(ContentType.JSON)
                         .when()
