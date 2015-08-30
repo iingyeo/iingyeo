@@ -1,6 +1,7 @@
 package iingyeo.entity;
 
 import lombok.Data;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,7 +25,6 @@ public class Card implements Serializable {
 
     private String text;
     private String backgroundUrl;
-
     @CreatedDate
     private Date created;
     @LastModifiedDate

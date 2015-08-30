@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -32,6 +33,7 @@ public class CardServiceImpl implements CardService {
 
         log.debug("add card request : {}", card);
 
+        card.setCreated(new Date());
         cardRepository.save(card);
 
         log.debug("add card response : {}", card);
@@ -56,7 +58,7 @@ public class CardServiceImpl implements CardService {
 
         log.debug("get cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
 
-        Pageable pageRequest = new PageRequest(pageNum, recordCount);
+        Pageable pageRequest = new PageRequest(pageNum, recordCount, Sort.Direction.DESC, "created");
 
         Page<Card> page = cardRepository.findAll(pageRequest);
 
