@@ -27,7 +27,7 @@ public class AuthenticationControllerTest extends AbstractControllerTest {
                         // Then
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .assertThat().body("name", is(username));
+                .assertThat().body("username", is(username));
 
     }
 
