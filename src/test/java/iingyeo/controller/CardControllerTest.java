@@ -34,7 +34,7 @@ import static org.junit.Assert.assertThat;
 public class CardControllerTest extends AbstractControllerTest {
 
     @Autowired
-    CardService cardService;
+    private CardService cardService;
 
     @Test
     public void testAddCard() throws Exception {
