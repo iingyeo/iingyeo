@@ -29,14 +29,11 @@ public class CardController {
     @ApiOperation(value = "Add a card", notes = "Add a card")
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("#oauth2.hasScope('write')")
-    public CardResponse addCard(Principal principal, @RequestBody CardRequest cardRequest) {
-
-        OAuth2Authentication auth = (OAuth2Authentication) principal;
-        IingyeoUserDetails userDetails = (IingyeoUserDetails) auth.getPrincipal();
+    public CardResponse addCard(@RequestBody CardRequest cardRequest) {
 
         log.debug("add card request : {}", cardRequest);
 
-        Card card = cardService.addCard(cardRequest.convertToCard(userDetails.getUser().getId()));
+        Card card = cardService.addCard(cardRequest.convertToCard());
 
         CardResponse cardResponse = new CardResponse(card);
 
@@ -81,20 +78,17 @@ public class CardController {
     @ApiOperation(value = "Update a card", notes = "Update a card")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @PreAuthorize("#oauth2.hasScope('write')")
-    public CardResponse updateCard(Principal principal, @PathVariable String id, @RequestBody CardRequest cardRequest) {
-
-        OAuth2Authentication auth = (OAuth2Authentication) principal;
-        IingyeoUserDetails userDetails = (IingyeoUserDetails) auth.getPrincipal();
+    public CardResponse updateCard(@PathVariable String id, @RequestBody CardRequest cardRequest) {
 
         log.debug("update card request for id[{}] : {}", id, cardRequest);
 
-        Card card = cardRequest.convertToCard(userDetails.getUser().getId());
+        Card card = cardRequest.convertToCard();
 
         card.setId(id);
 
         Card updatedCard = cardService.updateCard(card);
 
-        CardResponse cardResponse = new CardResponse(card);
+        CardResponse cardResponse = new CardResponse(updatedCard);
 
         log.debug("update card response for id[{}] : {}", id, cardResponse);
 
@@ -108,6 +102,23 @@ public class CardController {
         log.debug("delete card request for id[{}]", id);
 
         cardService.deleteCard(id);
+    }
+
+    @ApiOperation(value = "Add a child card to parent", notes = "Add a child card to parent")
+    @RequestMapping(value = "/{parentCardId}", method = RequestMethod.POST)
+    @PreAuthorize("#oauth2.hasScope('write')")
+    public CardResponse addChildCard(@PathVariable String parentCardId, @RequestBody CardRequest cardRequest) {
+
+        log.debug("add child card request for parentCardId[{}] : {}", parentCardId, cardRequest);
+
+        Card card = cardService.addChildCard(parentCardId, cardRequest.convertToCard());
+
+        CardResponse cardResponse = new CardResponse(card);
+
+        log.debug("add child card response for parentCardId[{}] : {}", parentCardId, cardResponse);
+
+        return cardResponse;
+
     }
 
 }

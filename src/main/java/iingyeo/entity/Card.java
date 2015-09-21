@@ -8,7 +8,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Kang on 2015. 6. 30..
@@ -25,8 +27,18 @@ public class Card implements Serializable {
 
     private String text;
     private String backgroundUrl;
+
+    private String parentCardId;
+    private List<String> childCardIdList = new ArrayList<>();
+
+    public void addChildCardId(String childCardId) {
+        this.childCardIdList.add(childCardId);
+    }
+
     @CreatedDate
     private Date created;
+
     @LastModifiedDate
     private Date updated;
+
 }

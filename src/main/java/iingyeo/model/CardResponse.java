@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Kang on 2015. 7. 1..
@@ -21,6 +22,8 @@ public class CardResponse implements Serializable {
     private String text;
     private String backgroundUrl;
 
+    private String parentCardId;
+    private List<String> childCardIdList;
 
     private Date created;
     private Date updated;
