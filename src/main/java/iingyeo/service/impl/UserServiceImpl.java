@@ -1,7 +1,9 @@
 package iingyeo.service.impl;
 
 import iingyeo.entity.User;
+import iingyeo.model.IingyeoUserDetails;
 import iingyeo.model.UserListResponse;
+import iingyeo.model.UserResponse;
 import iingyeo.repository.UserRepository;
 import iingyeo.service.UserService;
 import iingyeo.util.IingyeoBeanUtils;
@@ -10,9 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Date;
 
 /**
@@ -99,5 +105,22 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             userRepository.delete(id);
         }
+    }
+
+    @Override
+    public User getLoggedInUser() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        log.debug("get logged in user request for auth[{}]", auth.getName());
+
+        IingyeoUserDetails userDetails = (IingyeoUserDetails) auth.getPrincipal();
+
+        User loggedInUser = userDetails.getUser();
+
+        log.debug("get logged in user response for auth[{}] : {}", auth.getName(), loggedInUser);
+
+        return loggedInUser;
+
     }
 }

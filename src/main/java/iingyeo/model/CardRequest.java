@@ -17,13 +17,11 @@ public class CardRequest implements Serializable {
     private String text;
     private String backgroundUrl;
 
-    public Card convertToCard(String userId) {
+    public Card convertToCard() {
 
         Card card = new Card();
 
         IingyeoBeanUtils.copyNotNullProperties(this, card);
-
-        card.setUserId(userId);
 
         return card;
 

@@ -39,13 +39,9 @@ public class AuthenticationController {
     private UserService userService;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public UserResponse getLoggedInUser(Principal principal) {
+    public UserResponse getLoggedInUser() {
 
-        OAuth2Authentication auth = (OAuth2Authentication) principal;
-
-        IingyeoUserDetails userDetails = (IingyeoUserDetails) auth.getPrincipal();
-
-        UserResponse userResponse = new UserResponse(userDetails.getUser());
+        UserResponse userResponse = new UserResponse(userService.getLoggedInUser());
 
         log.debug("logged in user : [{}]", userResponse);
 
@@ -54,7 +50,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
-    public Boolean logout(HttpServletRequest request, HttpServletResponse response) {
+    public Boolean logout(HttpServletRequest request) {
 
         Authentication auth = tokenExtractor.extract(request);
 

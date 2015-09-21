@@ -8,13 +8,16 @@ import iingyeo.model.CardListResponse;
  */
 public interface CardService {
 
-    public Card addCard(Card card);
+    Card addCard(Card card);
 
-    public Card getCard(String id);
+    Card getCard(String id);
 
-    public CardListResponse getCards(int pageNum, int recordCount);
+    CardListResponse getCards(int pageNum, int recordCount);
 
-    public void deleteCard(String id);
+    void deleteCard(String id);
 
-    public Card updateCard(Card card);
+    Card updateCard(Card card);
+
+    Card addChildCard(String parentCardId, Card card);
+
 }

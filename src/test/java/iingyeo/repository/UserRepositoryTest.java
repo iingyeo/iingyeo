@@ -34,7 +34,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void testFindByEmailAddress() {
+    public void testFindByUsername() {
 
         // Given
         userRepository.save(new User("taemyung", "1234"));
