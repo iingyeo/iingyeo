@@ -121,4 +121,21 @@ public class CardController {
 
     }
 
+    @ApiOperation(value = "Like a card", notes = "Like a card")
+    @RequestMapping(value = "/{id}/like", method = RequestMethod.PUT)
+    @PreAuthorize("#oauth2.hasScope('write')")
+    public CardResponse likeCard(@PathVariable String id) {
+
+        log.debug("like card request for id[{}]", id);
+
+        Card likedCard = cardService.likeCard(id);
+
+        CardResponse cardResponse = new CardResponse(likedCard);
+
+        log.debug("like card response for id[{}] : {}", id, cardResponse);
+
+        return cardResponse;
+
+    }
+
 }

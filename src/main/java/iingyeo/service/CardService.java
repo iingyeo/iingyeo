@@ -20,4 +20,6 @@ public interface CardService {
 
     Card addChildCard(String parentCardId, Card card);
 
+    Card likeCard(String id);
+
 }
