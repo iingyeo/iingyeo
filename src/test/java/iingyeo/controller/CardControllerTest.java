@@ -5,6 +5,7 @@ import com.jayway.restassured.response.ResponseBodyExtractionOptions;
 import iingyeo.IingyeoTestApplication;
 import iingyeo.entity.Card;
 import iingyeo.model.CardRequest;
+import iingyeo.model.CardResponse;
 import iingyeo.service.CardService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
@@ -67,7 +68,7 @@ public class CardControllerTest extends AbstractControllerTest {
         // Given
         String accessToken = getAccessToken();
 
-        Card card = addCard();
+        CardResponse card = addCard();
 
         given()
                 .header("Authorization", "Bearer " + accessToken)
@@ -86,7 +87,7 @@ public class CardControllerTest extends AbstractControllerTest {
         // Given
         String accessToken = getAccessToken();
 
-        Card card = addCard();
+        CardResponse card = addCard();
         card.setText("updated card text");
         card.setBackgroundUrl("http://updated.com/updated.png");
 
@@ -113,7 +114,7 @@ public class CardControllerTest extends AbstractControllerTest {
     public void testDeleteCard() throws Exception {
 
         // Given
-        Card card = addCard();
+        CardResponse card = addCard();
 
         given()
                 .pathParam("id", card.getId())
@@ -129,7 +130,7 @@ public class CardControllerTest extends AbstractControllerTest {
     public void testAddChildCard() throws Exception {
 
         // Given
-        Card parentCard = addCard();
+        CardResponse parentCard = addCard();
 
         String accessToken = getAccessToken();
 
@@ -154,10 +155,49 @@ public class CardControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void testGetCardWithChild() throws Exception {
+
+        // Given
+        CardResponse parentCard = addCard();
+
+        String accessToken = getAccessToken();
+
+        CardRequest cardRequest = new CardRequest();
+
+        cardRequest.setText("test child card");
+        cardRequest.setBackgroundUrl("http://test.com/test.png");
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .body(cardRequest)
+                .contentType(ContentType.JSON)
+                        // When
+                .when()
+                .post("/cards/" + parentCard.getId())
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", notNullValue())
+                .body("text", is(cardRequest.getText()));
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("id", parentCard.getId())
+                        // When
+                .when()
+                .get("/cards/{id}")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("childCardCount", is(1));
+
+    }
+
+    @Test
     public void testDeleteChildCard() throws Exception {
 
         // Given
-        Card parentCard = addCard();
+        CardResponse parentCardResponse = addCard();
 
         String accessToken = getAccessToken();
 
@@ -172,13 +212,13 @@ public class CardControllerTest extends AbstractControllerTest {
                         .body(cardRequest)
                         .contentType(ContentType.JSON)
                         .when()
-                        .post("/cards/" + parentCard.getId())
+                        .post("/cards/" + parentCardResponse.getId())
                         .then()
                         .extract().body();
 
-        Card childCard = responseBodyExtractionOptions.as(Card.class);
+        CardResponse childCard = responseBodyExtractionOptions.as(CardResponse.class);
 
-        parentCard = cardService.getCard(parentCard.getId());
+        Card parentCard = cardService.getCard(parentCardResponse.getId());
 
         assertThat(parentCard.getChildCardIdList().contains(childCard.getId()), is(true));
 
@@ -201,7 +241,7 @@ public class CardControllerTest extends AbstractControllerTest {
     public void testDeleteParentCard() throws Exception {
 
         // Given
-        Card parentCard = addCard();
+        CardResponse parentCard = addCard();
 
         String accessToken = getAccessToken();
 
@@ -220,9 +260,9 @@ public class CardControllerTest extends AbstractControllerTest {
                         .then()
                         .extract().body();
 
-        Card childCard = responseBodyExtractionOptions.as(Card.class);
+        CardResponse childCardResponse = responseBodyExtractionOptions.as(CardResponse.class);
 
-        childCard = cardService.getCard(childCard.getId());
+        Card childCard = cardService.getCard(childCardResponse.getId());
 
         assertThat(childCard.getParentCardId(), is(parentCard.getId()));
 
@@ -241,7 +281,60 @@ public class CardControllerTest extends AbstractControllerTest {
 
     }
 
-    private Card addCard() throws Exception {
+    @Test
+    public void testLikeCard() throws Exception {
+
+        // Given
+        String accessToken = getAccessToken();
+
+        CardResponse card = addCard();
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("id", card.getId())
+                        // When
+                .when()
+                .put("/cards/{id}/like")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("likeUserCount", is(1));
+
+    }
+
+    @Test
+    public void testLikeCardWithDuplicate() throws Exception {
+
+        // Given
+        String accessToken = getAccessToken();
+
+        CardResponse card = addCard();
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("id", card.getId())
+                        // When
+                .when()
+                .put("/cards/{id}/like")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("likeUserCount", is(1));
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("id", card.getId())
+                        // When
+                .when()
+                .put("/cards/{id}/like")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("likeUserCount", is(1));
+
+    }
+
+    private CardResponse addCard() throws Exception {
 
         String accessToken = getAccessToken();
 
@@ -260,6 +353,7 @@ public class CardControllerTest extends AbstractControllerTest {
                         .then()
                         .extract().body();
 
-        return responseBodyExtractionOptions.as(Card.class);
+        return responseBodyExtractionOptions.as(CardResponse.class);
+
     }
 }

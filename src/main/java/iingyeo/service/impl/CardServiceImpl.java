@@ -117,6 +117,29 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public Card likeCard(String id) {
+
+        log.debug("like card request for id[{}]", id);
+
+        Card targetCard = cardRepository.findOne(id);
+
+        User loggedInUser = userService.getLoggedInUser();
+
+        if (loggedInUser != null) {
+            if (!targetCard.like(loggedInUser.getId())) {
+                log.debug("user[{}] already liked this card[{}]", loggedInUser.getId(), id);
+            }
+        }
+
+        Card updatedCard = cardRepository.save(targetCard);
+
+        log.debug("like card response : {}", updatedCard);
+
+        return updatedCard;
+
+    }
+
+    @Override
     public void deleteCard(String id) {
 
         log.debug("delete card request by id[{}]", id);
