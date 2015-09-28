@@ -25,10 +25,10 @@ public class CardResponse implements Serializable {
 
     private String parentCardId;
     private List<String> childCardIdList;
-    private Integer childCardCount;
+    private int childCardCount;
 
     private Set<String> likeUserIdSet;
-    private Integer likeUserCount;
+    private int likeUserCount;
 
     private Date created;
     private Date updated;
