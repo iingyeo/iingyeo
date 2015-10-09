@@ -30,6 +30,8 @@ public class CardResponse implements Serializable {
     private Set<String> likeUserIdSet;
     private int likeUserCount;
 
+    private Set<String> tagSet;
+
     private Date created;
     private Date updated;
 
@@ -44,6 +46,8 @@ public class CardResponse implements Serializable {
         if (likeUserIdSet != null && !likeUserIdSet.isEmpty()) {
             likeUserCount = likeUserIdSet.size();
         }
+
+        tagSet = card.filterTags();
 
     }
 }

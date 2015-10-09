@@ -1,6 +1,7 @@
 package iingyeo.entity;
 
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -31,6 +32,8 @@ public class Card implements Serializable {
 
     private Set<String> likeUserIdSet = new HashSet<>();
 
+    private Set<String> tagIdSet = new HashSet<>();
+
     public void addChildCardId(String childCardId) {
         this.childCardIdList.add(childCardId);
     }
@@ -39,10 +42,26 @@ public class Card implements Serializable {
         return likeUserIdSet.add(likeUserId);
     }
 
+    public void addTagId(String tagId) {
+        this.tagIdSet.add(tagId);
+    }
+
     @CreatedDate
     private Date created;
 
     @LastModifiedDate
     private Date updated;
+
+    public Set<String> filterTags() {
+        Set<String> tags = new HashSet<>();
+
+        for (String word : StringUtils.split(text)) {
+            if (word.startsWith("#") && word.length() > 1) {
+                tags.add(word.substring(1));
+            }
+        }
+
+        return tags;
+    }
 
 }

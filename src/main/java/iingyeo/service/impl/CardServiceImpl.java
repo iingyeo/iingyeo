@@ -1,10 +1,12 @@
 package iingyeo.service.impl;
 
 import iingyeo.entity.Card;
+import iingyeo.entity.Tag;
 import iingyeo.entity.User;
 import iingyeo.model.CardListResponse;
 import iingyeo.repository.CardRepository;
 import iingyeo.service.CardService;
+import iingyeo.service.TagService;
 import iingyeo.service.UserService;
 import iingyeo.util.IingyeoBeanUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +18,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Kang on 2015. 7. 1..
  */
-
-
 @Service
 @Slf4j
 public class CardServiceImpl implements CardService {
@@ -32,6 +33,9 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TagService tagService;
+
     @Override
     public Card addCard(Card card) {
 
@@ -41,6 +45,13 @@ public class CardServiceImpl implements CardService {
 
         if (loggedInUser != null) {
             card.setUserId(loggedInUser.getId());
+        }
+
+        Set<String> tagNames = card.filterTags();
+
+        for (String tagName : tagNames) {
+            Tag tag = tagService.findByName(tagName);
+            card.addTagId(tag.getId());
         }
 
         card.setCreated(new Date());
@@ -87,6 +98,16 @@ public class CardServiceImpl implements CardService {
         Card targetCard = cardRepository.findOne(card.getId());
 
         IingyeoBeanUtils.copyNotNullProperties(card, targetCard);
+
+        Set<String> tagNames = targetCard.filterTags();
+
+        targetCard.getTagIdSet().clear();
+
+        for (String tagName : tagNames) {
+            Tag tag = tagService.findByName(tagName);
+            targetCard.addTagId(tag.getId());
+        }
+
         targetCard.setUpdated(new Date());
 
         Card updatedCard = cardRepository.save(targetCard);
