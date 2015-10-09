@@ -1,5 +1,6 @@
 package iingyeo.controller;
 
+import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.ResponseBodyExtractionOptions;
 import iingyeo.IingyeoTestApplication;
@@ -18,9 +19,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static com.jayway.restassured.config.EncoderConfig.encoderConfig;
+import static com.jayway.restassured.config.RestAssuredConfig.newConfig;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 
@@ -60,6 +61,44 @@ public class CardControllerTest extends AbstractControllerTest {
                 .statusCode(HttpStatus.SC_OK)
                 .body("id", notNullValue())
                 .body("text", is(cardRequest.getText()));
+    }
+
+    @Test
+    public void testAddCardWithTags() throws Exception {
+
+        // Given
+        String accessToken = getAccessToken();
+
+        String tag1 = "tag1";
+        String tag2 = "testTag";
+        String tag3 = "잉여";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("test text").append("\n");
+        sb.append("#").append(tag1).append(" 하하하하").append("\n");
+        sb.append("#").append(tag2).append(" 하하하하").append("\n");
+        sb.append("test text").append("\n");
+        sb.append("iingyeo ").append("#").append(tag3).append(" 하하하하").append("\n");
+
+        CardRequest cardRequest = new CardRequest();
+
+        cardRequest.setText(sb.toString());
+        cardRequest.setBackgroundUrl("http://test.com/test.png");
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .body(cardRequest)
+                .contentType(ContentType.JSON)
+                        // When
+                .when()
+                .post("/cards")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", notNullValue())
+                .body("text", is(cardRequest.getText()))
+                .body("tagSet.size()", is(3))
+                .body("tagSet", hasItems(tag1, tag2, tag3));
     }
 
     @Test

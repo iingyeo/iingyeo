@@ -19,6 +19,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.util.Base64;
 
 import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.config.EncoderConfig.encoderConfig;
+import static com.jayway.restassured.config.RestAssuredConfig.newConfig;
 
 /**
  * Created by taemyung on 2015. 7. 11..
@@ -63,6 +65,7 @@ public abstract class AbstractControllerTest {
         userService.addUser(user);
 
         RestAssured.port = serverPort;
+        RestAssured.config = newConfig().encoderConfig(encoderConfig().defaultContentCharset("UTF-8"));
 
     }
 

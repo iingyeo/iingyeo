@@ -46,6 +46,7 @@ dependencies {
     compile("commons-beanutils:commons-beanutils")
     compile("com.mangofactory:swagger-springmvc:1.0.2")
     compile("com.mysema.querydsl:querydsl-mongodb:3.6.4")
+    compile("org.apache.commons:commons-lang3:3.4")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
     testCompile("com.jayway.restassured:rest-assured:2.4.1")
