@@ -15,4 +15,13 @@ public class CardPredicate {
         return card.likeUserIdSet.contains(userId);
 
     }
+
+    public static Predicate findChildCardsByUserId(String userId) {
+
+        QCard card = QCard.card;
+
+        return card.userId.eq(userId).and(card.parentCardId.isNotNull());
+
+    }
+
 }

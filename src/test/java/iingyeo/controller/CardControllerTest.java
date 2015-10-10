@@ -1,6 +1,5 @@
 package iingyeo.controller;
 
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.ResponseBodyExtractionOptions;
 import iingyeo.IingyeoTestApplication;
@@ -19,8 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.config.EncoderConfig.encoderConfig;
-import static com.jayway.restassured.config.RestAssuredConfig.newConfig;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -427,6 +424,43 @@ public class CardControllerTest extends AbstractControllerTest {
 
     }
 
+    @Test
+    public void testGetChildCards() throws Exception {
+
+        CardResponse parentCard = addCard();
+
+        String accessToken = getAccessToken();
+
+        CardRequest cardRequest = new CardRequest();
+
+        cardRequest.setText("test child card");
+        cardRequest.setBackgroundUrl("http://test.com/test.png");
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .body(cardRequest)
+                .contentType(ContentType.JSON)
+                        // When
+                .when()
+                .post("/cards/" + parentCard.getId())
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", notNullValue())
+                .body("text", is(cardRequest.getText()));
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                        // When
+                .when()
+                .get("/cards/child")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("totalCount", is(1));
+
+    }
+
     private CardResponse addCard() throws Exception {
 
         String accessToken = getAccessToken();
@@ -449,4 +483,5 @@ public class CardControllerTest extends AbstractControllerTest {
         return responseBodyExtractionOptions.as(CardResponse.class);
 
     }
+
 }
