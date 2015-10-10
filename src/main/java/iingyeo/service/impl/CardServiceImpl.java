@@ -20,8 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Set;
 
-import static iingyeo.repository.predicate.CardPredicate.findChildCardsByUserId;
-import static iingyeo.repository.predicate.CardPredicate.findLikeCardsByUserId;
+import static iingyeo.repository.predicate.CardPredicate.*;
 
 /**
  * Created by Kang on 2015. 7. 1..
@@ -126,6 +125,25 @@ public class CardServiceImpl implements CardService {
         CardListResponse cardListResponse = new CardListResponse(page.getTotalPages(), page.getTotalElements(), pageNum, page.getContent());
 
         log.debug("get child cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
+
+        return cardListResponse;
+
+    }
+
+    @Override
+    public CardListResponse getCardsByTag(String tagName, int pageNum, int recordCount) {
+
+        log.debug("get cards by tag[{}] request for pageNum[{}], recordCount[{}]", tagName, pageNum, recordCount);
+
+        Pageable pageRequest = new PageRequest(pageNum, recordCount, Sort.Direction.DESC, "created");
+
+        Tag tag = tagService.findByName(tagName);
+
+        Page<Card> page = cardRepository.findAll(findCardsByTagId(tag.getId()), pageRequest);
+
+        CardListResponse cardListResponse = new CardListResponse(page.getTotalPages(), page.getTotalElements(), pageNum, page.getContent());
+
+        log.debug("get cards by tag[{}] result for pageNum[{}], recordCount[{}] : {}", tagName, pageNum, recordCount, cardListResponse);
 
         return cardListResponse;
 

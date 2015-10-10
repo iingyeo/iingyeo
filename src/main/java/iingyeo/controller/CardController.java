@@ -101,6 +101,21 @@ public class CardController {
 
     }
 
+    @ApiOperation(value = "Get cards by tag", notes = "Get cards by tag, pageNum, recordCount")
+    @RequestMapping(value = "/tag", method = RequestMethod.GET)
+    @PreAuthorize("#oauth2.hasScope('read')")
+    public CardListResponse getCardsByTag(@RequestParam String tagName, @RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
+
+        log.debug("get cards by tag[{}] request for pageNum[{}], recordCount[{}]", tagName, pageNum, recordCount);
+
+        CardListResponse cardListResponse = cardService.getCardsByTag(tagName, pageNum, recordCount);
+
+        log.debug("get cards by tag[{}] result for pageNum[{}], recordCount[{}] : {}", tagName, pageNum, recordCount, cardListResponse);
+
+        return cardListResponse;
+
+    }
+
     @ApiOperation(value = "Update a card", notes = "Update a card")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @PreAuthorize("#oauth2.hasScope('write')")

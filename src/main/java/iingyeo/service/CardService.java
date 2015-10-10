@@ -18,6 +18,8 @@ public interface CardService {
 
     CardListResponse getChildCards(int pageNum, int recordCount);
 
+    CardListResponse getCardsByTag(String tagName, int pageNum, int recordCount);
+
     void deleteCard(String id);
 
     Card updateCard(Card card);
