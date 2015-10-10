@@ -1,7 +1,6 @@
 package iingyeo.service.impl;
 
 import iingyeo.entity.Card;
-import iingyeo.entity.QCard;
 import iingyeo.entity.Tag;
 import iingyeo.entity.User;
 import iingyeo.model.CardListResponse;
