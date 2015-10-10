@@ -24,4 +24,12 @@ public class CardPredicate {
 
     }
 
+    public static Predicate findCardsByTagId(String tagId) {
+
+        QCard card = QCard.card;
+
+        return card.tagIdSet.contains(tagId);
+
+    }
+
 }

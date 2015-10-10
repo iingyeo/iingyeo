@@ -461,6 +461,57 @@ public class CardControllerTest extends AbstractControllerTest {
 
     }
 
+    @Test
+    public void testGetCardsByTag() throws Exception {
+
+        // Given
+        String accessToken = getAccessToken();
+
+        String tag1 = "tag1";
+        String tag2 = "testTag";
+        String tag3 = "잉여";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("test text").append("\n");
+        sb.append("#").append(tag1).append(" 하하하하").append("\n");
+        sb.append("#").append(tag2).append(" 하하하하").append("\n");
+        sb.append("test text").append("\n");
+        sb.append("iingyeo ").append("#").append(tag3).append(" 하하하하").append("\n");
+
+        CardRequest cardRequest = new CardRequest();
+
+        cardRequest.setText(sb.toString());
+        cardRequest.setBackgroundUrl("http://test.com/test.png");
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .body(cardRequest)
+                .contentType(ContentType.JSON)
+                        // When
+                .when()
+                .post("/cards")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("id", notNullValue())
+                .body("text", is(cardRequest.getText()))
+                .body("tagSet.size()", is(3))
+                .body("tagSet", hasItems(tag1, tag2, tag3));
+
+        addCard();
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                        // When
+                .when()
+                .get("/cards/tag?tagName=" + tag1)
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("totalCount", is(1));
+
+    }
+
     private CardResponse addCard() throws Exception {
 
         String accessToken = getAccessToken();
