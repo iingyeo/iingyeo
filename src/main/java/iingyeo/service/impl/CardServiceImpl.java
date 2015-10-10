@@ -1,6 +1,7 @@
 package iingyeo.service.impl;
 
 import iingyeo.entity.Card;
+import iingyeo.entity.QCard;
 import iingyeo.entity.Tag;
 import iingyeo.entity.User;
 import iingyeo.model.CardListResponse;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Set;
+
+import static iingyeo.repository.predicate.CardPredicate.findLikeCardsByUserId;
 
 /**
  * Created by Kang on 2015. 7. 1..
@@ -88,6 +91,25 @@ public class CardServiceImpl implements CardService {
         log.debug("get cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
 
         return cardListResponse;
+    }
+
+    @Override
+    public CardListResponse getLikeCards(int pageNum, int recordCount) {
+
+        log.debug("get like cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
+
+        Pageable pageRequest = new PageRequest(pageNum, recordCount, Sort.Direction.DESC, "created");
+
+        User loggedInUser = userService.getLoggedInUser();
+
+        Page<Card> page = cardRepository.findAll(findLikeCardsByUserId(loggedInUser.getId()), pageRequest);
+
+        CardListResponse cardListResponse = new CardListResponse(page.getTotalPages(), page.getTotalElements(), pageNum, page.getContent());
+
+        log.debug("get like cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
+
+        return cardListResponse;
+
     }
 
     @Override
