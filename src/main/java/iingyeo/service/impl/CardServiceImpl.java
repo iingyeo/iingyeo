@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Set;
 
+import static iingyeo.repository.predicate.CardPredicate.findChildCardsByUserId;
 import static iingyeo.repository.predicate.CardPredicate.findLikeCardsByUserId;
 
 /**
@@ -106,6 +107,25 @@ public class CardServiceImpl implements CardService {
         CardListResponse cardListResponse = new CardListResponse(page.getTotalPages(), page.getTotalElements(), pageNum, page.getContent());
 
         log.debug("get like cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
+
+        return cardListResponse;
+
+    }
+
+    @Override
+    public CardListResponse getChildCards(int pageNum, int recordCount) {
+
+        log.debug("get child cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
+
+        Pageable pageRequest = new PageRequest(pageNum, recordCount, Sort.Direction.DESC, "created");
+
+        User loggedInUser = userService.getLoggedInUser();
+
+        Page<Card> page = cardRepository.findAll(findChildCardsByUserId(loggedInUser.getId()), pageRequest);
+
+        CardListResponse cardListResponse = new CardListResponse(page.getTotalPages(), page.getTotalElements(), pageNum, page.getContent());
+
+        log.debug("get child cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
 
         return cardListResponse;
 

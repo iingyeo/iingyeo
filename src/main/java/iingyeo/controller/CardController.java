@@ -5,15 +5,11 @@ import iingyeo.entity.Card;
 import iingyeo.model.CardListResponse;
 import iingyeo.model.CardRequest;
 import iingyeo.model.CardResponse;
-import iingyeo.model.IingyeoUserDetails;
 import iingyeo.service.CardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 /**
  * Created by Kang on 2015. 7. 1..
@@ -85,6 +81,21 @@ public class CardController {
         CardListResponse cardListResponse = cardService.getLikeCards(pageNum, recordCount);
 
         log.debug("get like cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
+
+        return cardListResponse;
+
+    }
+
+    @ApiOperation(value = "Get child cards", notes = "Get child cards by pageNum, recordCount")
+    @RequestMapping(value = "/child", method = RequestMethod.GET)
+    @PreAuthorize("#oauth2.hasScope('read')")
+    public CardListResponse getChildCards(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
+
+        log.debug("get child cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
+
+        CardListResponse cardListResponse = cardService.getChildCards(pageNum, recordCount);
+
+        log.debug("get child cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
 
         return cardListResponse;
 

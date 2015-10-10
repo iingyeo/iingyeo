@@ -16,6 +16,8 @@ public interface CardService {
 
     CardListResponse getLikeCards(int pageNum, int recordCount);
 
+    CardListResponse getChildCards(int pageNum, int recordCount);
+
     void deleteCard(String id);
 
     Card updateCard(Card card);
