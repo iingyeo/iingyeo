@@ -75,6 +75,21 @@ public class CardController {
 
     }
 
+    @ApiOperation(value = "Get like cards", notes = "Get like cards by pageNum, recordCount")
+    @RequestMapping(value = "/like", method = RequestMethod.GET)
+    @PreAuthorize("#oauth2.hasScope('read')")
+    public CardListResponse getLikeCards(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
+
+        log.debug("get like cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
+
+        CardListResponse cardListResponse = cardService.getLikeCards(pageNum, recordCount);
+
+        log.debug("get like cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
+
+        return cardListResponse;
+
+    }
+
     @ApiOperation(value = "Update a card", notes = "Update a card")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @PreAuthorize("#oauth2.hasScope('write')")
