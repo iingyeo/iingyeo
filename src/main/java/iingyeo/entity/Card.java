@@ -2,7 +2,6 @@ package iingyeo.entity;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -29,28 +28,34 @@ public class Card implements Serializable {
 
     private String parentCardId;
     private List<String> childCardIdList = new ArrayList<>();
+    private int childCardCount;
 
     private Set<String> likeUserIdSet = new HashSet<>();
+    private int likeUserCount;
 
     private Set<String> tagIdSet = new HashSet<>();
-
-    public void addChildCardId(String childCardId) {
-        this.childCardIdList.add(childCardId);
-    }
-
-    public boolean like(String likeUserId) {
-        return likeUserIdSet.add(likeUserId);
-    }
-
-    public void addTagId(String tagId) {
-        this.tagIdSet.add(tagId);
-    }
 
     @CreatedDate
     private Date created;
 
     @LastModifiedDate
     private Date updated;
+
+    public void addChildCardId(String childCardId) {
+        this.childCardIdList.add(childCardId);
+        this.childCardCount = childCardIdList.size();
+    }
+
+    public boolean like(String likeUserId) {
+        boolean result = this.likeUserIdSet.add(likeUserId);
+        this.likeUserCount = likeUserIdSet.size();
+
+        return result;
+    }
+
+    public void addTagId(String tagId) {
+        this.tagIdSet.add(tagId);
+    }
 
     public Set<String> filterTags() {
         Set<String> tags = new HashSet<>();

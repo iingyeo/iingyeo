@@ -12,7 +12,7 @@ public interface CardService {
 
     Card getCard(String id);
 
-    CardListResponse getCards(int pageNum, int recordCount);
+    CardListResponse getCards(int pageNum, int recordCount, String sortBy, String sortDirection);
 
     CardListResponse getLikeCards(int pageNum, int recordCount);
 

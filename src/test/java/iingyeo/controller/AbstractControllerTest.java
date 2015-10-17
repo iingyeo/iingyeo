@@ -3,6 +3,8 @@ package iingyeo.controller;
 import com.jayway.restassured.RestAssured;
 import iingyeo.IingyeoTestApplication;
 import iingyeo.entity.User;
+import iingyeo.repository.CardRepository;
+import iingyeo.repository.TagRepository;
 import iingyeo.repository.UserRepository;
 import iingyeo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,12 @@ public abstract class AbstractControllerTest {
     @Autowired
     protected UserService userService;
 
+    @Autowired
+    private CardRepository cardRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
     @Value("${local.server.port}")
     protected int serverPort;
 
@@ -53,6 +61,8 @@ public abstract class AbstractControllerTest {
     public void setUp() throws Exception {
 
         userRepository.deleteAll();
+        cardRepository.deleteAll();
+        tagRepository.deleteAll();
 
         clientId = "iingyeo";
         secret = "1234";

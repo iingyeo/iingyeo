@@ -39,14 +39,6 @@ public class CardResponse implements Serializable {
 
         IingyeoBeanUtils.copyNotNullProperties(card, this);
 
-        if (childCardIdList != null && !childCardIdList.isEmpty()) {
-            childCardCount = childCardIdList.size();
-        }
-
-        if (likeUserIdSet != null && !likeUserIdSet.isEmpty()) {
-            likeUserCount = likeUserIdSet.size();
-        }
-
         tagSet = card.filterTags();
 
     }
