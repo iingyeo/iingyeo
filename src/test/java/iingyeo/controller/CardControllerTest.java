@@ -392,6 +392,39 @@ public class CardControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void testGetCardsSortByLikeUserCount() throws Exception {
+
+        // Given
+        String accessToken = getAccessToken();
+
+        CardResponse card = addCard();
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                .pathParam("id", card.getId())
+                        // When
+                .when()
+                .put("/cards/{id}/like")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("likeUserCount", is(1));
+
+        addCard();
+
+        given()
+                .header("Authorization", "Bearer " + accessToken)
+                        // When
+                .when()
+                .get("/cards?sortBy=likeUserCount")
+                        // Then
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("totalCount", is(2));
+
+    }
+
+    @Test
     public void testGetLikeCards() throws Exception {
 
         // Given

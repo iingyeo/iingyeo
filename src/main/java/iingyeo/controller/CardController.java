@@ -59,13 +59,17 @@ public class CardController {
     @ApiOperation(value = "Get cards", notes = "Get cards by pageNum, recordCount")
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("#oauth2.hasScope('read')")
-    public CardListResponse getCards(@RequestParam(defaultValue = "0") int pageNum, @RequestParam(defaultValue = "10") int recordCount) {
+    public CardListResponse getCards(
+            @RequestParam(defaultValue = "0") int pageNum,
+            @RequestParam(defaultValue = "10") int recordCount,
+            @RequestParam(defaultValue = "created") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDirection) {
 
-        log.debug("get cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
+        log.debug("get cards request for pageNum[{}], recordCount[{}], sortBy[{}], sortDirection[{}]", pageNum, recordCount, sortBy, sortDirection);
 
-        CardListResponse cardListResponse = cardService.getCards(pageNum, recordCount);
+        CardListResponse cardListResponse = cardService.getCards(pageNum, recordCount, sortBy, sortDirection);
 
-        log.debug("get cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
+        log.debug("get cards result for pageNum[{}], recordCount[{}], sortBy[{}], sortDirection[{}] : {}", pageNum, recordCount, sortBy, sortDirection, cardListResponse);
 
         return cardListResponse;
 

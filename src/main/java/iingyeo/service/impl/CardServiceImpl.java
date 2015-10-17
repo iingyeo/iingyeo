@@ -77,17 +77,17 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardListResponse getCards(int pageNum, int recordCount) {
+    public CardListResponse getCards(int pageNum, int recordCount, String sortBy, String sortDirection) {
 
-        log.debug("get cards request for pageNum[{}], recordCount[{}]", pageNum, recordCount);
+        log.debug("get cards request for pageNum[{}], recordCount[{}], sortBy[{}], sortDirection[{}]", pageNum, recordCount, sortBy, sortDirection);
 
-        Pageable pageRequest = new PageRequest(pageNum, recordCount, Sort.Direction.DESC, "created");
+        Pageable pageRequest = new PageRequest(pageNum, recordCount, Sort.Direction.fromString(sortDirection), sortBy);
 
         Page<Card> page = cardRepository.findAll(pageRequest);
 
         CardListResponse cardListResponse = new CardListResponse(page.getTotalPages(), page.getTotalElements(), pageNum, page.getContent());
 
-        log.debug("get cards result for pageNum[{}], recordCount[{}] : {}", pageNum, recordCount, cardListResponse);
+        log.debug("get cards result for pageNum[{}], recordCount[{}], sortBy[{}], sortDirection[{}] : {}", pageNum, recordCount, sortBy, sortDirection, cardListResponse);
 
         return cardListResponse;
     }
