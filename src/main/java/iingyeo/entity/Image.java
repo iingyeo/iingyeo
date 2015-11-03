@@ -23,8 +23,8 @@ public class Image implements Serializable{
 
     private String fontColor;
 
-    private String height;
-    private String width;
+    private int height;
+    private int width;
 
     private String storeType;
 

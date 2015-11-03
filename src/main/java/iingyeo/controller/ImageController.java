@@ -2,9 +2,13 @@ package iingyeo.controller;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import com.wordnik.swagger.annotations.ApiOperation;
+import iingyeo.entity.Image;
 import iingyeo.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +27,7 @@ public class ImageController {
 
     @ApiOperation(value = "Add a Image", notes = "Add a Image")
     @RequestMapping(method = RequestMethod.POST)
-    public String addImage(@RequestBody MultipartFile file) {
+    public Image addImage(@RequestBody MultipartFile file) {
 
         log.debug("add image request : {}", file);
 
@@ -37,10 +41,15 @@ public class ImageController {
 
     @ApiOperation(value = "Get a Image", notes = "Get a Image")
     @RequestMapping(value = "/{imageId}", method = RequestMethod.GET)
-    public GridFSDBFile getImage(@PathVariable String imageId) {
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable String imageId) {
 
         log.debug("get image request : {}", imageId);
-        return imageService.getImage(imageId);
+        GridFSDBFile gridFSDBFile = imageService.getImage(imageId);
+
+        return ResponseEntity.ok()
+                .contentLength(gridFSDBFile.getLength())
+                .contentType(MediaType.parseMediaType("image/jpg"))
+                .body(new InputStreamResource(gridFSDBFile.getInputStream()));
 
     }
 

@@ -2,6 +2,7 @@ package iingyeo.service;
 
 
 import com.mongodb.gridfs.GridFSDBFile;
+import iingyeo.entity.Image;
 
 import java.io.InputStream;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface ImageService {
 
-    String addImage(InputStream inputStream);
+    Image addImage(InputStream inputStream);
 
     GridFSDBFile getImage(String imageId);
 
